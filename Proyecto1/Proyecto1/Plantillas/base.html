@@ -1,0 +1,36 @@
+<html>
+
+<head>
+
+
+<title>
+
+
+    {% block title%}  {% endblock%}
+
+
+</title>
+
+
+</head>
+
+
+<body>
+
+    <h1 style="background-color:darkolivegreen; color:white; text-align:center"> Proyecto Django </h1>
+    
+    {% include "barra.html" %}
+
+    <h3 style="text-align:right" > Aprendiendo Django </h3>
+
+    {% block content%} {% endblock%} 
+
+
+    <p> Aprendiendo Django , para entrevista</p> 
+
+
+
+
+</body>
+
+</html>

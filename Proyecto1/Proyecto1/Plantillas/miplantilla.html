@@ -1,0 +1,41 @@
+<html>
+    <body>
+        {% include "barra.html" %}
+
+
+    <h1 style="color: blue">
+    Hola Mundo plantilla con variable de nombre
+    </s>
+    <h2>My name is : {{nombre_persona|upper}} {{apellidos|lower}}</h2>
+    <p>La hora es : {{hora.time}}</p>
+    <p>  <strong>La lista es : </strong>  </p>
+
+    {# así se ponen los comentarios de una linea #}
+
+    {% comment %} comentario de varias
+    lineas 
+    de código
+    {% endcomment %}
+
+    <p>
+        <ul>
+            {% if lista%}
+                {% for i in lista%}
+
+                    <li>{{i|first}}</li>
+
+                {% endfor %}
+
+                {% else %}
+
+                    <p> no hay elementos</p>
+
+            {% endif %}
+            
+        </ul>
+
+
+
+    </p>
+    </body>
+    </html>
