@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html leng="en">
+<head>
+        <meta charset="utf-8">
+        <title>Welcome to my Flickr alike site</title>
+
+        
+</head>
+
+<body>
+    <h1>Welcome to this Flickr copy</h1>
+    <p>This is like Flickr but friki</p>
+
+    {%if photos_list|length > 0 %}
+        <h2>Last published Photos</h2>
+        {% for photo in photos_list %}
+            <a href="/photos/{{photo.pk}}">
+                <img src="{{photo.url}}" alt="{{photo.name}}" height="150">
+            </a>
+        {% endfor %}
+    {%else%}
+        Be the firstone to publish a photo
+    {%endif%}
+     
+</body>
+
+
+</html>
+
