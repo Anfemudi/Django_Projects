@@ -16,9 +16,17 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from photos import views
+from flickr_user import views as app_views
+##from users import views as User_view
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('home/', views.home),
-    path('photos/<int:pk>/',views.detail),
+
+    ##photos urls
+    path('home/', views.home,name='photos_home'),
+    path('photos/<int:pk>/',views.detail,name='photos_detail'),
+
+    ##users URL
+    path('login/',app_views.login,name='users_login'),
+    path('logout/',app_views.logout,name='users_logout'),
 ]
 
