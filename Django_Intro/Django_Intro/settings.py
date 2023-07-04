@@ -126,3 +126,18 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+## Login URL
+
+LOGIN_URL='/login' ## When user not authentiated redirect to login website
+
+LICENSES = (
+    ('POK','LICENSE OF POKEMON'),
+    ('NIN','NINTENDO LICENSE')
+)
+
+# BADWORDS http://goo.gl/G2nCu7
+
+
+PROJECT_BADWORDS=['Mamahostias','Arrastramantas','Asaltapozos']

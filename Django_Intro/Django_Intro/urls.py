@@ -22,11 +22,12 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     ##photos urls
-    path('home/', views.home,name='photos_home'),
-    path('photos/<int:pk>/',views.detail,name='photos_detail'),
+    path('home/', views.HomeView.as_view(),name='photos_home'),
+    path('photos/<int:pk>/',views.DetailView.as_view(),name='photos_detail'),
+    path('photos/new/', views.CreateView.as_view() ,name='create_photo'),
 
     ##users URL
-    path('login/',app_views.login,name='users_login'),
-    path('logout/',app_views.logout,name='users_logout'),
+    path('login/',app_views.LoginView.as_view(),name='users_login'),
+    path('logout/',app_views.logoutView.as_view(),name='users_logout'),
 ]
 
