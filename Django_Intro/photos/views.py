@@ -3,13 +3,36 @@ from django.http import HttpResponse,HttpResponseNotFound
 from photos.models import Photo, PUBLIC
 from photos.forms import PhotoForm
 from django.urls import reverse
-from django.contrib.auth.decorators import login_required
-from django.views.generic import View
+from django.contrib.auth.decorators import login_required 
+from django.views.generic import View , ListView
 from django.utils.decorators import method_decorator
+from django.db.models import Q
+
+
 
 
 
 # Create your views here.
+
+
+class PhotosQuerySet(object):
+
+    
+    def get_photos_queryset(self,request):
+
+        if not request.user.is_authenticated:
+            photos=Photo.objects.filter(visibility=PUBLIC)
+        elif request.user.is_superuser:
+            photos=Photo.objects.all()
+        else:
+            ## Q class helps create an or at bit level . so i can have either one of the  conditions to show the photos
+            photos=Photo.objects.filter(Q(owner=request.user)|Q(visibility=PUBLIC))
+
+        return photos
+
+
+
+
 
 # as a controler it has a Request parameter
 
@@ -35,7 +58,7 @@ class HomeView(View):
     
 
 
-class DetailView(View):
+class DetailView(View,PhotosQuerySet):
     
 
     def get(self,request,pk):
@@ -60,7 +83,7 @@ class DetailView(View):
 
         ## the selecte_related brings the owner field in the same query , and not in separete queries
         ## Select_related and prefetch_related helps optimize django queries
-        possible_photos = Photo.objects.filter(pk=pk).select_related('owner')
+        possible_photos = self.get_photos_queryset(request).filter(pk=pk).select_related('owner')
         photo = possible_photos[0] if len(possible_photos) >=1 else None
 
         if photo is not None:
@@ -81,7 +104,7 @@ class DetailView(View):
 class AuthenticatedView(View):
 
     def get(self,request):
-        if request.user.is_authenticated():
+        if request.user.is_authenticated:
             return super(AuthenticatedView,self).get(request)
 
 
@@ -125,3 +148,26 @@ class CreateView(View):
             'success_message': success_message
         }
         return render(request,'photos/new_photo.html',context)
+
+
+class PhotoListView(View,PhotosQuerySet):
+    def get(self,request):
+        ### returns:
+        ###- all public photos if user not authenticated
+        ###- all authenticated user's photos and public photos 
+        ###- all photos if user is super admin user
+        
+        
+        context = {
+            'photos': self.get_photos_queryset(request)
+            }
+        
+        return render(request,'photos/photos_list.html',context)
+            
+class UserPhotosView(ListView):
+    model= Photo
+    template_name='photos/user_photos.html'
+
+    def get_queryset(self):
+        queryset=super(UserPhotosView,self).get_queryset()
+        return queryset.filter(owner=self.request.user)
