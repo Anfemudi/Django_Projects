@@ -18,6 +18,8 @@ from django.urls import path
 from photos import views
 from flickr_user import views as app_views
 from django.contrib.auth.decorators import login_required 
+from flickr_user import api
+from photos import api as api_photos
 ##from users import views as User_view
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -29,8 +31,17 @@ urlpatterns = [
     path('photos/new/', views.CreateView.as_view() ,name='create_photo'),
     path('my-photos/', login_required(views.UserPhotosView.as_view()) ,name='user_photos'),
 
+    ##hotos API URLS
+
+    path('api/1.0/photos/',api_photos.PhotoListAPI.as_view(),name='photo_list_api'),
+
+
     ##users URL
     path('login/',app_views.LoginView.as_view(),name='users_login'),
     path('logout/',app_views.logoutView.as_view(),name='users_logout'),
+
+    #Users API URLs
+    path('api/1.0/users/',api.UserListAPI.as_view(),name='user_list_api'),
+    path('api/1.0/users/<int:pk>',api.UserDetailAPI.as_view(),name='user_Detail_api'),
 ]
 
