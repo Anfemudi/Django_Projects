@@ -31,9 +31,10 @@ urlpatterns = [
     path('photos/new/', views.CreateView.as_view() ,name='create_photo'),
     path('my-photos/', login_required(views.UserPhotosView.as_view()) ,name='user_photos'),
 
-    ##hotos API URLS
+    ##Photos API URLS
 
     path('api/1.0/photos/',api_photos.PhotoListAPI.as_view(),name='photo_list_api'),
+    path('api/1.0/photos/<int:pk>',api_photos.PhotoDetailAPI.as_view(),name='photo_detail_api'),
 
 
     ##users URL
