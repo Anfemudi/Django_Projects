@@ -4,17 +4,29 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.shortcuts import get_object_or_404
 from rest_framework import status
+from rest_framework.pagination import PageNumberPagination
+from flickr_user.permissions import UserPermissions
 
 class UserListAPI(APIView):
 
+
+    permission_classes=(UserPermissions,)
+
     def get(self,request):
+        self.check_permissions(request)
         users=User.objects.all()
+        ##Paging of queryset
+        paginator=PageNumberPagination()
+        paginator.paginate_queryset(users,request)
         serializer=userSerializer(users,many=True)
         serialized_users=serializer.data #dictionaries' list
-        return Response(serialized_users)
+        ##return pagination anwer
+        return paginator.get_paginated_response(serialized_users)
     
     def post(self,request):
         ##rest framework takes post and convert it to data so we replace request.POST with request.data
+        ## VALIDATES IF USER HAS PERMISSIONS TO DO THE ACTION
+        self.check_permissions(request)
         serializer= userSerializer(data=request.data)
 
         if serializer.is_valid():
