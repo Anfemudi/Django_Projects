@@ -14,35 +14,23 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
-from photos import views
-from flickr_user import views as app_views
-from django.contrib.auth.decorators import login_required 
-from flickr_user import api
-from photos import api as api_photos
+from django.urls import path , include
+from flickr_user import urls as users_urls, api_urls as users_api_urls
+from photos import urls as photos_urls, api_urls as photos_api_urls
+
+
+
+
 ##from users import views as User_view
 urlpatterns = [
     path('admin/', admin.site.urls),
+    ## Users URLs
+    path('',include(users_urls)),
+    path('api/',include(users_api_urls)),
 
-    ##photos urls
-    path('home/', views.HomeView.as_view(),name='photos_home'),
-    path('photos/', views.PhotoListView.as_view(),name='photos_list'),
-    path('photos/<int:pk>/',views.DetailView.as_view(),name='photos_detail'),
-    path('photos/new/', views.CreateView.as_view() ,name='create_photo'),
-    path('my-photos/', login_required(views.UserPhotosView.as_view()) ,name='user_photos'),
-
-    ##Photos API URLS
-
-    path('api/1.0/photos/',api_photos.PhotoListAPI.as_view(),name='photo_list_api'),
-    path('api/1.0/photos/<int:pk>',api_photos.PhotoDetailAPI.as_view(),name='photo_detail_api'),
-
-
-    ##users URL
-    path('login/',app_views.LoginView.as_view(),name='users_login'),
-    path('logout/',app_views.logoutView.as_view(),name='users_logout'),
-
-    #Users API URLs
-    path('api/1.0/users/',api.UserListAPI.as_view(),name='user_list_api'),
-    path('api/1.0/users/<int:pk>',api.UserDetailAPI.as_view(),name='user_Detail_api'),
+    ## Photos URLs
+    path('',include(photos_urls)),
+    path('api/',include(photos_api_urls)),
 ]
+
 
